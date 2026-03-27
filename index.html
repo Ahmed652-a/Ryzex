@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacked By Ryzex</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000000;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            color: white;
+            cursor: pointer;
+        }
+        
+        #snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 35px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.15);
+        }
+
+        .hacker-img {
+            max-width: 100%;
+            width: 280px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .main-title {
+            font-size: 2.2em;
+            text-shadow: 0 0 20px #00ff00;
+            margin: 0;
+            color: #00ff00;
+            letter-spacing: 2px;
+        }
+
+        .sub-message {
+            color: #ff4444;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            animation: blink 1s infinite;
+        }
+
+        .hacking-status {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+            transition: width 0.4s ease;
+        }
+
+        #status-text {
+            font-size: 0.75em;
+            color: #00ff00;
+            display: block;
+            margin-top: 8px;
+        }
+
+        /* إخفاء مشغل اليوتيوب */
+        #youtube-player {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        .footer-hint {
+            font-size: 0.7em;
+            color: #444;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snow"></canvas>
+
+    <!-- مشغل يوتيوب مخفي -->
+    <div id="youtube-player"></div>
+
+    <div class="container">
+        <img src="https://cdn.discordapp.com/attachments/1430193729234276465/1486948426816950313/23AD25EA-0DF8-4FC2-8A89-439770551776.gif?ex=69c75c23&is=69c60aa3&hm=5fb8178e5c24c96561575c811392ee21ca35ed2fd32c558afe7f3cf88ddafa3f&" alt="[Image of Hacker]" class="hacker-img">
+        
+        <h1 class="main-title">Hacked By Ryzex</h1>
+        
+        <p class="sub-message">ALL FILES ENCRYPTED</p>
+
+        <div class="hacking-status">
+            <div class="progress-container">
+                <div class="progress-bar" id="bar"></div>
+            </div>
+            <span id="status-text">> CONNECTING TO YOUTUBE... 0%</span>
+        </div>
+
+        <div class="footer-hint">CLICK ANYWHERE TO ACTIVATE AUDIO</div>
+    </div>
+
+    <!-- تحميل مكتبة اليوتيوب -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let player;
+        const videoId = 'wxySM7FDJkQ'; // معرف الفيديو من الرابط
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: videoId,
+                playerVars: {
+                    'autoplay': 1,
+                    'loop': 1,
+                    'playlist': videoId,
+                    'controls': 0
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // كتم الصوت أولاً لضمان التحميل، ثم فك الكتم عند الضغط
+            event.target.mute();
+            event.target.playVideo();
+        }
+
+        // تفعيل الصوت عند الضغط في أي مكان
+        document.body.addEventListener('click', () => {
+            if (player && player.unMute) {
+                player.unMute();
+                player.setVolume(100);
+                player.playVideo();
+                console.log("Audio Activated from YouTube");
+            }
+        }, { once: true });
+
+        // شريط التقدم
+        let progress = 0;
+        const bar = document.getElementById('bar');
+        const statusText = document.getElementById('status-text');
+        
+        const hackingSteps = [
+            "FETCHING AUDIO STREAM...",
+            "BYPASSING SECURITY...",
+            "DELETING SYSTEM DATA...",
+            "SYSTEM COMPROMISED!"
+        ];
+
+        setInterval(() => {
+            if (progress < 100) {
+                progress += Math.floor(Math.random() * 3) + 1;
+                if (progress > 100) progress = 100;
+                bar.style.width = progress + '%';
+                
+                let step = hackingSteps[Math.floor(progress / 30)] || hackingSteps[3];
+                statusText.textContent = `> ${step} ${progress}%`;
+            }
+        }, 400);
+
+        // تأثير النقاط الخضراء
+        const canvas = document.getElementById("snow");
+        const ctx = canvas.getContext("2d");
+        let width, height, particles = [];
+
+        function setSize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            createParticles();
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 1.5 + 0.5,
+                    v: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "#00ff00";
+            ctx.beginPath();
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                ctx.moveTo(p.x, p.y);
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            }
+            ctx.fill();
+            updateParticles();
+        }
+
+        function updateParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.y += p.v;
+                if (p.y > height) {
+                    p.y = -5;
+                    p.x = Math.random() * width;
+                }
+            }
+        }
+
+        function loop() {
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        window.addEventListener("resize", setSize);
+        setSize();
+        loop();
+    </script>
+</body>
+</html>
