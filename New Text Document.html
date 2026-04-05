@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacked By Anonymous - Digital Rain</title>
+    <style>
+        body {
+            background-color: #000; /* خلفية سوداء عميقة ليتناسب مع الصورة والشبكة */
+            margin: 0;
+            overflow: hidden; /* إخفاء أشرطة التمرير */
+            height: 100vh;
+            color: #d1d1d1;
+            font-family: "Courier New", Courier, monospace;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* حاوية الخلفية والشبكة - للحفاظ على الـ UI كما هو */
+        .background-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1; /* الطبقة الأدنى */
+        }
+
+        /* الصورة الأصلية (الشبكة واللوغو) - سأضبطها هنا */
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15; /* تقليل الوضوح جداً لتكون خلفية الشبكة فقط */
+        }
+
+        /* الشبكة الخلفية المدمجة (إضافة طبقة شبكة دقيقة) */
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(20, 20, 20, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 20, 20, 0.4) 1px, transparent 1px);
+            background-size: 30px 30px; /* حجم الشبكة الدقيق */
+        }
+
+        /* طبقة الـ Canvas للمطر المضيء */
+        #rainCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5; /* فوق الخلفية ولكن تحت النص */
+        }
+
+        /* حاوية النصوص (UI) - الحفاظ عليها كما هي */
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10; /* فوق المطر */
+        }
+
+        .header-text {
+            color: #ffffff; 
+            font-size: 2rem;
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .data-line {
+            margin: 10px 0;
+            font-size: 0.85rem;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .highlight { color: #fff; font-weight: bold; }
+
+        .divider {
+            border-bottom: 1px solid #222; 
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        /* تأثير الكتابة */
+        .typing {
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            border-right: 2px solid #fff;
+            animation: typing-effect 2s steps(25, end) forwards;
+        }
+
+        @keyframes typing-effect {
+            from { width: 0; }
+            to { width: 100%; border-right-color: transparent; }
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.6rem;
+            color: #333; /* خافت جداً */
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-audio" loop>
+        <source src="[FREE] Dark Techno Cyberpunk  Industrial Midtempo Bass Type Beat 'OBSERVER'.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="background-wrap">
+        <img src="235a3cbc3f5d581882c4a88bc61a11c0.jpg" class="background-image">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <canvas id="rainCanvas"></canvas>
+
+    <div class="container">
+        <div class="header-text"><span class="typing">ANONYMOUS</span></div>
+        <div class="data-line" style="color:#555;">-- We Fucked Your Server --</div>
+        
+        <div class="divider"></div>
+
+        <div class="data-line">> STATUS: <span class="highlight">ENCRYPTED</span></div>
+        <div class="data-line">> SERVER: <span class="highlight">OFFLINE</span></div>
+        <div class="data-line">> CONNECTION: <span class="highlight">SECURE_TUNNEL</span></div>
+        
+        <div class="divider"></div>
+        <div class="data-line" style="font-size: 0.7rem;">WE DO NOT FORGIVE. WE DO NOT FORGET.</div>
+    </div>
+
+    <div class="footer-text">ACCESS_DENIED</div>
+
+    <script>
+
+                const audio = document.getElementById('bg-audio');
+        
+        // تشغيل الصوت عند أول ضغطة في أي مكان في الصفحة
+        document.body.addEventListener('click', () => {
+            audio.play().catch(e => console.error("Audio failed to play:", e));
+        }, { once: true });
+        // دالة إنشاء تأثير المطر المضيء على الـ Canvas
+        function initDigitalRain() {
+            const canvas = document.getElementById('rainCanvas');
+            const ctx = canvas.getContext('2d');
+            let w, h, drops;
+
+            // ضبط حجم الكانفاس ليتناسب مع حجم الشاشة
+            function resizeCanvas() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                initDrops();
+            }
+
+            // تعريف كلاس لقطرات المطر
+            class Drop {
+                constructor() {
+                    this.init();
+                }
+
+                init() {
+                    this.x = Math.random() * w; // موقع أفقي عشوائي
+                    this.y = Math.random() * h * 1.5; // موقع عمودي عشوائي (فوق الشاشة)
+                    this.z = Math.random(); // بعد عمودي (لإنشاء عمق)
+                    
+                    // خصائص القطرة (تشبه النقاط في صورتك)
+                    this.size = (Math.random() * 2 + 1) * this.z; // حجم أصغر للقطرات الأبعد
+                    this.speed = (Math.random() * 0.5 + 0.1) * this.z + 0.05; // سرعة أبطأ للأبعد
+                    this.alpha = (Math.random() * 0.3 + 0.1) * this.z; // شفافية أقل للأبعد
+                }
+
+                update() {
+                    // حركة السقوط لأسفل
+                    this.y -= this.speed * 20; // حركة بطيئة جداً مثل الصورة
+
+                    // إعادة تعيين القطرة عند الخروج من الشاشة لأسفل
+                    if (this.y < -50) {
+                        this.init();
+                        this.y = h + 20; // تبدأ من الأعلى مرة أخرى
+                    }
+                }
+
+                draw() {
+                    // رسم القطرة كدائرة مضيئة (Glow)
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    
+                    // تأثير التوهج (Bloom)
+                    ctx.shadowBlur = this.size * 5;
+                    ctx.shadowColor = '#fff'; // توهج أبيض
+
+                    // تأثير التوهج الدقيق (أخضر خافت مثل صورتك)
+                    if(this.z > 0.6) {
+                        ctx.shadowColor = 'rgba(0, 255, 0, 0.4)'; // وهج أخضر خافت جداً للأقرب
+                    }
+
+                    // رسم الدائرة الأساسية
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fff'; // قلب القطرة أبيض
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            // إنشاء مجموعة القطرات
+            function initDrops() {
+                // عدد القطرات (أقل من صورتك لجعلها أكثر تشتتاً وجمالاً)
+                const numDrops = Math.floor(w * h / 6000); 
+                drops = Array.from({ length: numDrops }, () => new Drop());
+            }
+
+            // حلقة التحريك الرئيسية
+            function animate() {
+                // مسح الكانفاس في كل إطار
+                ctx.clearRect(0, 0, w, h);
+
+                // تحديث ورسم كل قطرة
+                drops.forEach(drop => {
+                    drop.update();
+                    drop.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            // تشغيل التأثير
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+        }
+
+        // تشغيل تأثير المطر عند تحميل الصفحة
+        window.onload = function() {
+            initDigitalRain();
+        };
+
+    </script>
+</body>
+</html>
